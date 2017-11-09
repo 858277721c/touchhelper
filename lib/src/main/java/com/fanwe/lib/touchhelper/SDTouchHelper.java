@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.fanwe.library.touchhelper;
+package com.fanwe.lib.touchhelper;
 
 import android.util.Log;
 import android.view.MotionEvent;
