@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 
-import com.fanwe.library.touchhelper.SDTouchHelper;
+import com.fanwe.lib.touchhelper.SDTouchHelper;
 
 public class MainActivity extends AppCompatActivity
 {
