@@ -18,7 +18,7 @@ package com.fanwe.lib.touchhelper;
 import android.content.Context;
 import android.widget.Scroller;
 
-public class SDScroller extends Scroller
+public class FScroller extends Scroller
 {
     /**
      * 默认最小滚动时长
@@ -54,7 +54,7 @@ public class SDScroller extends Scroller
      */
     private int mDistanceMoveY;
 
-    public SDScroller(Context context)
+    public FScroller(Context context)
     {
         super(context);
     }

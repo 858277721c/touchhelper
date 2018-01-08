@@ -4,12 +4,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 
-import com.fanwe.lib.touchhelper.SDTouchHelper;
+import com.fanwe.lib.touchhelper.FTouchHelper;
 
 public class MainActivity extends AppCompatActivity
 {
 
-    private SDTouchHelper mTouchHelper = new SDTouchHelper();
+    private FTouchHelper mTouchHelper = new FTouchHelper();
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
