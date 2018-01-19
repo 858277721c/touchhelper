@@ -16,6 +16,7 @@
 package com.fanwe.lib.touchhelper;
 
 import android.content.Context;
+import android.view.animation.Interpolator;
 import android.widget.Scroller;
 
 public class FScroller extends Scroller
@@ -57,6 +58,11 @@ public class FScroller extends Scroller
     public FScroller(Context context)
     {
         super(context);
+    }
+
+    public FScroller(Context context, Interpolator interpolator)
+    {
+        super(context, interpolator);
     }
 
     /**
