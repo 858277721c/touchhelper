@@ -48,11 +48,11 @@ public class FScroller extends Scroller
     /**
      * 两次computeScrollOffset()之间x移动的距离
      */
-    private int mDistanceMoveX;
+    private int mDeltaX;
     /**
      * 两次computeScrollOffset()之间y移动的距离
      */
-    private int mDistanceMoveY;
+    private int mDeltaY;
 
     public FScroller(Context context)
     {
@@ -165,8 +165,8 @@ public class FScroller extends Scroller
         int currX = getCurrX();
         int currY = getCurrY();
 
-        mDistanceMoveX = currX - mLastX;
-        mDistanceMoveY = currY - mLastY;
+        mDeltaX = currX - mLastX;
+        mDeltaY = currY - mLastY;
 
         mLastX = currX;
         mLastY = currY;
@@ -178,9 +178,9 @@ public class FScroller extends Scroller
      *
      * @return
      */
-    public int getDistanceMoveX()
+    public int getDeltaX()
     {
-        return mDistanceMoveX;
+        return mDeltaX;
     }
 
     /**
@@ -188,9 +188,9 @@ public class FScroller extends Scroller
      *
      * @return
      */
-    public int getDistanceMoveY()
+    public int getDeltaY()
     {
-        return mDistanceMoveY;
+        return mDeltaY;
     }
 
     /**
