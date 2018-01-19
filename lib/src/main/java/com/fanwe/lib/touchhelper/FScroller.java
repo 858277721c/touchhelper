@@ -95,6 +95,8 @@ public class FScroller extends Scroller
         mMinScrollDuration = minScrollDuration;
     }
 
+    //---------- scroll extend start ----------
+
     // scroll
     public boolean startScrollX(int startX, int dx, int duration)
     {
@@ -146,6 +148,8 @@ public class FScroller extends Scroller
             return true;
         }
     }
+
+    //---------- scroll extend end ----------
 
     @Override
     public void startScroll(int startX, int startY, int dx, int dy, int duration)
