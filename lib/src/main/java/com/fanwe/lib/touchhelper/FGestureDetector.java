@@ -65,9 +65,7 @@ public class FGestureDetector extends GestureDetector
         if (action == MotionEvent.ACTION_UP)
         {
             getVelocityTracker().computeCurrentVelocity(1000);
-            final float velocityX = getVelocityTracker().getXVelocity();
-            final float velocityY = getVelocityTracker().getYVelocity();
-            mCallback.onActionUp(ev, velocityX, velocityY);
+            mCallback.onActionUp(ev, getVelocityTracker().getXVelocity(), getVelocityTracker().getYVelocity());
             releaseVelocityTracker();
         } else if (action == MotionEvent.ACTION_CANCEL)
         {
