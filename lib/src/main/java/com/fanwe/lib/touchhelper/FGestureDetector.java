@@ -58,6 +58,7 @@ public class FGestureDetector extends GestureDetector
     @Override
     public boolean onTouchEvent(MotionEvent ev)
     {
+        getVelocityTracker().addMovement(ev);
         boolean result = super.onTouchEvent(ev);
 
         final int action = ev.getAction();
