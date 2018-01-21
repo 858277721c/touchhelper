@@ -25,7 +25,7 @@ import android.view.ViewParent;
  */
 public class FTouchHelper
 {
-    private static final String TAG = "FTouchHelper";
+    private static final String TAG = FTouchHelper.class.getSimpleName();
 
     private boolean mIsDebug;
 
