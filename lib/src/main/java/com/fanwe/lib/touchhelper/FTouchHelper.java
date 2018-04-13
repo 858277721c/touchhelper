@@ -48,6 +48,7 @@ public class FTouchHelper
     private boolean mIsNeedCosume = false;
 
     private boolean mReleaseOnActionUp = true;
+    private boolean mReleaseOnActionCancel = true;
 
     private float mCurrentX;
     private float mCurrentY;
@@ -100,6 +101,13 @@ public class FTouchHelper
                 mUpY = mCurrentY;
 
                 if (mReleaseOnActionUp)
+                {
+                    setNeedIntercept(false);
+                    setNeedCosume(false);
+                }
+                break;
+            case MotionEvent.ACTION_CANCEL:
+                if (mReleaseOnActionCancel)
                 {
                     setNeedIntercept(false);
                     setNeedCosume(false);
@@ -159,6 +167,31 @@ public class FTouchHelper
     public void setReleaseOnActionUp(boolean releaseOnActionUp)
     {
         mReleaseOnActionUp = releaseOnActionUp;
+    }
+
+    public void setReleaseOnActionCancel(boolean releaseOnActionCancel)
+    {
+        mReleaseOnActionCancel = releaseOnActionCancel;
+    }
+
+    public float getCurrentX()
+    {
+        return mCurrentX;
+    }
+
+    public float getCurrentY()
+    {
+        return mCurrentY;
+    }
+
+    public float getLastX()
+    {
+        return mLastX;
+    }
+
+    public float getLastY()
+    {
+        return mLastY;
     }
 
     public float getDownX()
