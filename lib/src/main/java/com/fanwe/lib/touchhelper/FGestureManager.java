@@ -161,6 +161,8 @@ public class FGestureManager
 
         switch (event.getAction())
         {
+            case MotionEvent.ACTION_DOWN:
+                return getCallback().consumeDownEvent(event);
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
                 releaseVelocityTracker();
@@ -172,13 +174,8 @@ public class FGestureManager
                     mTouchHelper.setNeedCosume(consume);
                 } else
                 {
-                    if (getCallback().shouldConsumeTouchEvent(event))
-                    {
-                        mTouchHelper.setNeedCosume(true);
-                    } else
-                    {
-                        mTouchHelper.setNeedCosume(false);
-                    }
+                    final boolean shouldConsumeTouchEvent = getCallback().shouldConsumeTouchEvent(event);
+                    mTouchHelper.setNeedCosume(shouldConsumeTouchEvent);
                 }
                 break;
         }
@@ -215,7 +212,20 @@ public class FGestureManager
          */
         boolean shouldInterceptTouchEvent(MotionEvent event);
 
+        /**
+         * 是否需要拦截发生变化
+         *
+         * @param needIntercept
+         */
         void onNeedInterceptChanged(boolean needIntercept);
+
+        /**
+         * 是否需要消费按下事件，只有此方法返回true，才有后续的移动事件
+         *
+         * @param event
+         * @return
+         */
+        boolean consumeDownEvent(MotionEvent event);
 
         /**
          * 是否开始消费事件
@@ -255,6 +265,12 @@ public class FGestureManager
             @Override
             public void onNeedInterceptChanged(boolean needIntercept)
             {
+            }
+
+            @Override
+            public boolean consumeDownEvent(MotionEvent event)
+            {
+                return false;
             }
 
             @Override
