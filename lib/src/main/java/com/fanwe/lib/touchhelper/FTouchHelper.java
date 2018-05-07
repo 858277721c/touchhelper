@@ -97,12 +97,10 @@ public class FTouchHelper
                 mUpX = mCurrentX;
                 mUpY = mCurrentY;
 
-                setNeedIntercept(false);
-                setNeedCosume(false);
+                onFinishEvent();
                 break;
             case MotionEvent.ACTION_CANCEL:
-                setNeedIntercept(false);
-                setNeedCosume(false);
+                onFinishEvent();
                 break;
             default:
                 break;
@@ -113,6 +111,12 @@ public class FTouchHelper
             StringBuilder sb = getDebugInfo();
             Log.i(TAG, "event " + ev.getAction() + ":" + sb.toString());
         }
+    }
+
+    protected void onFinishEvent()
+    {
+        setNeedIntercept(false);
+        setNeedCosume(false);
     }
 
     /**
