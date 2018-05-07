@@ -104,6 +104,17 @@ public class FGestureManager
     }
 
     /**
+     * 是否拦截事件
+     *
+     * @param intercept
+     */
+    public void interceptTouchEvent(boolean intercept)
+    {
+        mTouchHelper.setNeedIntercept(intercept);
+        FTouchHelper.requestDisallowInterceptTouchEvent(mViewGroup, intercept);
+    }
+
+    /**
      * 外部调用
      *
      * @param event
@@ -118,36 +129,19 @@ public class FGestureManager
 
         mTouchHelper.processTouchEvent(event);
 
-        boolean intercept = false;
         switch (event.getAction())
         {
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
                 if (getCallback().shouldInterceptTouchEvent(event))
                 {
-                    intercept = true;
+                    interceptTouchEvent(true);
+                    return true;
                 }
                 break;
         }
 
-        if (intercept)
-        {
-            interceptTouchEvent(true);
-            return true;
-        }
-
         return false;
-    }
-
-    /**
-     * 是否拦截事件
-     *
-     * @param intercept
-     */
-    public void interceptTouchEvent(boolean intercept)
-    {
-        mTouchHelper.setNeedIntercept(intercept);
-        FTouchHelper.requestDisallowInterceptTouchEvent(mViewGroup, intercept);
     }
 
     /**

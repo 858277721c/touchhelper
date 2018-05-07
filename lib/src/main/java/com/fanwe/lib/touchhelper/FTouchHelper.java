@@ -47,9 +47,6 @@ public class FTouchHelper
      */
     private boolean mIsNeedCosume = false;
 
-    private boolean mReleaseOnActionUp = true;
-    private boolean mReleaseOnActionCancel = true;
-
     private float mCurrentX;
     private float mCurrentY;
     private float mLastX;
@@ -100,18 +97,12 @@ public class FTouchHelper
                 mUpX = mCurrentX;
                 mUpY = mCurrentY;
 
-                if (mReleaseOnActionUp)
-                {
-                    setNeedIntercept(false);
-                    setNeedCosume(false);
-                }
+                setNeedIntercept(false);
+                setNeedCosume(false);
                 break;
             case MotionEvent.ACTION_CANCEL:
-                if (mReleaseOnActionCancel)
-                {
-                    setNeedIntercept(false);
-                    setNeedCosume(false);
-                }
+                setNeedIntercept(false);
+                setNeedCosume(false);
                 break;
             default:
                 break;
@@ -162,16 +153,6 @@ public class FTouchHelper
     public boolean isNeedCosume()
     {
         return mIsNeedCosume;
-    }
-
-    public void setReleaseOnActionUp(boolean releaseOnActionUp)
-    {
-        mReleaseOnActionUp = releaseOnActionUp;
-    }
-
-    public void setReleaseOnActionCancel(boolean releaseOnActionCancel)
-    {
-        mReleaseOnActionCancel = releaseOnActionCancel;
     }
 
     public float getCurrentX()
