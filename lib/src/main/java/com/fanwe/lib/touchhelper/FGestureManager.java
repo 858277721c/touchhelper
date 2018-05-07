@@ -132,12 +132,22 @@ public class FGestureManager
 
         if (intercept)
         {
-            mTouchHelper.setNeedIntercept(true);
-            FTouchHelper.requestDisallowInterceptTouchEvent(mViewGroup, true);
+            interceptTouchEvent(true);
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * 是否拦截事件
+     *
+     * @param intercept
+     */
+    public void interceptTouchEvent(boolean intercept)
+    {
+        mTouchHelper.setNeedIntercept(intercept);
+        FTouchHelper.requestDisallowInterceptTouchEvent(mViewGroup, intercept);
     }
 
     /**
