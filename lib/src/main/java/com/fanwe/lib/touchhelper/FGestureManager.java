@@ -106,6 +106,11 @@ public class FGestureManager
         return mViewConfiguration;
     }
 
+    /**
+     * 在本次按下到离开的过程中是否触发了滚动
+     *
+     * @return
+     */
     public boolean hasScrolled()
     {
         return mHasScrolled;
