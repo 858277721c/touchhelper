@@ -49,14 +49,12 @@ public abstract class FGestureFrameLayout extends FrameLayout
             @Override
             public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
             {
-                super.onScroll(e1, e2, distanceX, distanceY);
                 return FGestureFrameLayout.this.onGestureScroll(e2);
             }
 
             @Override
             public void onFinishEvent(MotionEvent event, float velocityX, float velocityY)
             {
-                super.onFinishEvent(event, velocityX, velocityY);
                 FGestureFrameLayout.this.onGestureFinish(event, velocityX, velocityY);
             }
 
@@ -119,13 +117,8 @@ public abstract class FGestureFrameLayout extends FrameLayout
         switch (event.getAction())
         {
             case MotionEvent.ACTION_DOWN:
-                if (shouldInterceptTouchEventDown(event))
-                {
-                    intercept = true;
-                }
-                break;
             case MotionEvent.ACTION_MOVE:
-                if (shouldInterceptTouchEventMove(event))
+                if (shouldInterceptTouchEvent(event))
                 {
                     intercept = true;
                 }
@@ -150,23 +143,12 @@ public abstract class FGestureFrameLayout extends FrameLayout
     }
 
     /**
-     * 是否要开始手势拦截({@link MotionEvent#ACTION_DOWN}事件)
+     * 是否要开始手势拦截({@link MotionEvent#ACTION_DOWN}和{@link MotionEvent#ACTION_MOVE}事件触发)
      *
      * @param event
      * @return
      */
-    protected boolean shouldInterceptTouchEventDown(MotionEvent event)
-    {
-        return false;
-    }
-
-    /**
-     * 是否要开始手势拦截({@link MotionEvent#ACTION_MOVE}事件)
-     *
-     * @param event
-     * @return
-     */
-    protected boolean shouldInterceptTouchEventMove(MotionEvent event)
+    protected boolean shouldInterceptTouchEvent(MotionEvent event)
     {
         return false;
     }
