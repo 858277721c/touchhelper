@@ -198,7 +198,7 @@ public class FGestureManager
     public interface Callback
     {
         /**
-         * 是否要开始手势拦截({@link MotionEvent#ACTION_DOWN}和{@link MotionEvent#ACTION_MOVE}事件触发)
+         * 是否要开始拦截({@link MotionEvent#ACTION_DOWN}和{@link MotionEvent#ACTION_MOVE}事件会触发此方法)
          *
          * @param event
          * @return
