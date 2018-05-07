@@ -96,7 +96,7 @@ public class FGestureManager
         mTouchHelper.setNeedIntercept(intercept);
     }
 
-    private VelocityTracker getVelocityTracker()
+    public VelocityTracker getVelocityTracker()
     {
         if (mVelocityTracker == null)
         {
@@ -165,6 +165,7 @@ public class FGestureManager
                 return getCallback().consumeDownEvent(event);
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
+                getCallback().onConsumeEventFinish(event);
                 releaseVelocityTracker();
                 break;
             default:
@@ -244,13 +245,11 @@ public class FGestureManager
         boolean onConsumeEvent(MotionEvent event);
 
         /**
-         * 手势结束回调，收到{@link MotionEvent#ACTION_UP}或者{@link MotionEvent#ACTION_CANCEL}
+         * 事件结束回调，收到{@link MotionEvent#ACTION_UP}或者{@link MotionEvent#ACTION_CANCEL}
          *
          * @param event
-         * @param velocityX x方向速度
-         * @param velocityY y方向速度
          */
-        void onGestureFinish(MotionEvent event, float velocityX, float velocityY);
+        void onConsumeEventFinish(MotionEvent event);
 
         void onComputeScroll(int dx, int dy, boolean finish);
 
@@ -286,7 +285,7 @@ public class FGestureManager
             }
 
             @Override
-            public void onGestureFinish(MotionEvent event, float velocityX, float velocityY)
+            public void onConsumeEventFinish(MotionEvent event)
             {
             }
 
