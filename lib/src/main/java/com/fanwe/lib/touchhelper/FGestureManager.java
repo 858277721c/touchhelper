@@ -23,11 +23,19 @@ import android.view.ViewGroup;
 public class FGestureManager
 {
     private final ViewGroup mViewGroup;
-    private final FTouchHelper mTouchHelper = new FTouchHelper();
     private final FGestureDetector mGestureDetector;
     private FScroller mScroller;
     private ViewConfiguration mViewConfiguration;
     private boolean mHasScrolled;
+    private final FTouchHelper mTouchHelper = new FTouchHelper()
+    {
+        @Override
+        public void setNeedIntercept(boolean needIntercept)
+        {
+            super.setNeedIntercept(needIntercept);
+            FTouchHelper.requestDisallowInterceptTouchEvent(mViewGroup, needIntercept);
+        }
+    };
 
     private Callback mCallback;
 
@@ -124,7 +132,6 @@ public class FGestureManager
     public void interceptTouchEvent(boolean intercept)
     {
         mTouchHelper.setNeedIntercept(intercept);
-        FTouchHelper.requestDisallowInterceptTouchEvent(mViewGroup, intercept);
     }
 
     /**
