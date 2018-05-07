@@ -69,6 +69,8 @@ public class FGestureDetector extends GestureDetector
                 releaseVelocityTracker();
                 break;
             case MotionEvent.ACTION_CANCEL:
+                getVelocityTracker().computeCurrentVelocity(1000);
+                mCallback.onActionCancel(ev, getVelocityTracker().getXVelocity(), getVelocityTracker().getYVelocity());
                 releaseVelocityTracker();
                 break;
             default:
@@ -81,6 +83,10 @@ public class FGestureDetector extends GestureDetector
     public static class Callback extends SimpleOnGestureListener
     {
         public void onActionUp(MotionEvent event, float velocityX, float velocityY)
+        {
+        }
+
+        public void onActionCancel(MotionEvent event, float velocityX, float velocityY)
         {
         }
     }
