@@ -98,6 +98,9 @@ public abstract class FGestureFrameLayout extends FrameLayout
         {
             onComputeScroll(getScroller().getDeltaX(), getScroller().getDeltaY());
             invalidate();
+        } else
+        {
+
         }
     }
 
@@ -207,4 +210,6 @@ public abstract class FGestureFrameLayout extends FrameLayout
     }
 
     protected abstract void onComputeScroll(int dx, int dy);
+
+    protected abstract void onComputeScrollFinish();
 }
