@@ -27,6 +27,7 @@ public class FGestureManager
     private final FGestureDetector mGestureDetector;
     private FScroller mScroller;
     private ViewConfiguration mViewConfiguration;
+    private boolean mHasScrolled;
 
     private Callback mCallback;
 
@@ -44,6 +45,7 @@ public class FGestureManager
             @Override
             public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
             {
+                mHasScrolled = true;
                 return getCallback().onGestureScroll(e2);
             }
 
@@ -51,6 +53,7 @@ public class FGestureManager
             public void onFinishEvent(MotionEvent event, float velocityX, float velocityY)
             {
                 getCallback().onGestureFinish(event, velocityX, velocityY);
+                mHasScrolled = false;
             }
 
             @Override
@@ -101,6 +104,11 @@ public class FGestureManager
             mViewConfiguration = ViewConfiguration.get(getContext());
         }
         return mViewConfiguration;
+    }
+
+    public boolean hasScrolled()
+    {
+        return mHasScrolled;
     }
 
     /**
