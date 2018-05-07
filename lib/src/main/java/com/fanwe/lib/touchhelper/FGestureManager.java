@@ -189,8 +189,8 @@ public class FGestureManager
                     }
                 } else
                 {
-                    final boolean shouldConsumeTouchEvent = getCallback().shouldConsumeTouchEvent(event);
-                    mTouchHelper.setTagConsume(shouldConsumeTouchEvent);
+                    final boolean shouldConsume = getCallback().shouldConsumeTouchEvent(event);
+                    mTouchHelper.setTagConsume(shouldConsume);
                 }
                 break;
         }
