@@ -149,16 +149,17 @@ public class FGestureManager
 
         mTouchHelper.processTouchEvent(event);
 
-        switch (event.getAction())
+        final int action = event.getAction();
+        if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL)
         {
-            case MotionEvent.ACTION_DOWN:
-            case MotionEvent.ACTION_MOVE:
-                if (getCallback().shouldInterceptTouchEvent(event))
-                {
-                    interceptTouchEvent(true);
-                    return true;
-                }
-                break;
+            // 不处理
+        } else
+        {
+            if (getCallback().shouldInterceptTouchEvent(event))
+            {
+                interceptTouchEvent(true);
+                return true;
+            }
         }
 
         return false;
