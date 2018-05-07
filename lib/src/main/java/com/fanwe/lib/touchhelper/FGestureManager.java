@@ -27,20 +27,21 @@ public class FGestureManager
     private FScroller mScroller;
     private ViewConfiguration mViewConfiguration;
     private VelocityTracker mVelocityTracker;
+    private boolean mHasConsumed;
     private final FTouchHelper mTouchHelper = new FTouchHelper()
     {
         @Override
-        public void setNeedIntercept(boolean needIntercept)
+        public void setTagIntercept(boolean tagIntercept)
         {
-            super.setNeedIntercept(needIntercept);
-            getCallback().onNeedInterceptChanged(needIntercept);
+            super.setTagIntercept(tagIntercept);
+            getCallback().onTagInterceptChanged(tagIntercept);
         }
 
         @Override
-        public void setNeedConsume(boolean needConsume)
+        public void setTagConsume(boolean tagConsume)
         {
-            super.setNeedConsume(needConsume);
-            getCallback().onNeedConsumeChanged(needConsume);
+            super.setTagConsume(tagConsume);
+            getCallback().onTagConsumeChanged(tagConsume);
         }
     };
 
@@ -112,6 +113,16 @@ public class FGestureManager
     }
 
     /**
+     * 一次完整的按下到离开的触摸过程中，是否有消费过事件
+     *
+     * @return
+     */
+    public boolean hasConsumed()
+    {
+        return mHasConsumed;
+    }
+
+    /**
      * 外部调用
      *
      * @param event
@@ -119,7 +130,7 @@ public class FGestureManager
      */
     public boolean onInterceptTouchEvent(MotionEvent event)
     {
-        if (mTouchHelper.isNeedIntercept())
+        if (mTouchHelper.isTagIntercept())
         {
             return true;
         }
@@ -136,7 +147,7 @@ public class FGestureManager
             default:
                 if (getCallback().shouldInterceptTouchEvent(event))
                 {
-                    mTouchHelper.setNeedIntercept(true);
+                    mTouchHelper.setTagIntercept(true);
                     return true;
                 }
                 break;
@@ -164,21 +175,27 @@ public class FGestureManager
             case MotionEvent.ACTION_CANCEL:
                 getCallback().onConsumeEventFinish(event);
                 releaseVelocityTracker();
+                mHasConsumed = false;
                 break;
             default:
-                if (mTouchHelper.isNeedConsume())
+                if (mTouchHelper.isTagConsume())
                 {
                     final boolean consume = getCallback().onConsumeEvent(event);
-                    mTouchHelper.setNeedConsume(consume);
+                    mTouchHelper.setTagConsume(consume);
+
+                    if (consume)
+                    {
+                        mHasConsumed = true;
+                    }
                 } else
                 {
                     final boolean shouldConsumeTouchEvent = getCallback().shouldConsumeTouchEvent(event);
-                    mTouchHelper.setNeedConsume(shouldConsumeTouchEvent);
+                    mTouchHelper.setTagConsume(shouldConsumeTouchEvent);
                 }
                 break;
         }
 
-        return mTouchHelper.isNeedConsume();
+        return mTouchHelper.isTagConsume();
     }
 
     /**
@@ -215,7 +232,7 @@ public class FGestureManager
          *
          * @param intercept
          */
-        void onNeedInterceptChanged(boolean intercept);
+        void onTagInterceptChanged(boolean intercept);
 
         /**
          * 是否需要消费按下事件，只有此方法返回true，才有后续的移动事件
@@ -238,7 +255,7 @@ public class FGestureManager
          *
          * @param consume
          */
-        void onNeedConsumeChanged(boolean consume);
+        void onTagConsumeChanged(boolean consume);
 
         /**
          * 事件回调
@@ -266,7 +283,7 @@ public class FGestureManager
             }
 
             @Override
-            public void onNeedInterceptChanged(boolean intercept)
+            public void onTagInterceptChanged(boolean intercept)
             {
             }
 
@@ -283,7 +300,7 @@ public class FGestureManager
             }
 
             @Override
-            public void onNeedConsumeChanged(boolean consume)
+            public void onTagConsumeChanged(boolean consume)
             {
             }
 

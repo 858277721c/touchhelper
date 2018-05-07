@@ -39,13 +39,13 @@ public class FTouchHelper
     public static final int EVENT_LAST = 1;
 
     /**
-     * onInterceptTouchEvent方法是否需要拦截事件
+     * 是否需要拦截事件标识(用于onInterceptTouchEvent方法)
      */
-    private boolean mIsNeedIntercept = false;
+    private boolean mTagIntercept = false;
     /**
-     * onTouchEvent方法是否需要消费事件
+     * 是否需要消费事件标识(用于onTouchEvent方法)
      */
-    private boolean mIsNeedConsume = false;
+    private boolean mTagConsume = false;
 
     private float mCurrentX;
     private float mCurrentY;
@@ -97,10 +97,10 @@ public class FTouchHelper
                 mUpX = mCurrentX;
                 mUpY = mCurrentY;
 
-                release();
+                resetTag();
                 break;
             case MotionEvent.ACTION_CANCEL:
-                release();
+                resetTag();
                 break;
             default:
                 break;
@@ -113,50 +113,50 @@ public class FTouchHelper
         }
     }
 
-    private void release()
+    public void resetTag()
     {
-        setNeedIntercept(false);
-        setNeedConsume(false);
+        setTagIntercept(false);
+        setTagConsume(false);
     }
 
     /**
-     * 设置onInterceptTouchEvent方法是否需要拦截事件
+     * 设置是否需要拦截事件标识(用于onInterceptTouchEvent方法)
      *
-     * @param needIntercept
+     * @param tagIntercept
      */
-    public void setNeedIntercept(boolean needIntercept)
+    public void setTagIntercept(boolean tagIntercept)
     {
-        mIsNeedIntercept = needIntercept;
+        mTagIntercept = tagIntercept;
     }
 
     /**
-     * onInterceptTouchEvent方法是否需要拦截事件
-     *
-     * @return
-     */
-    public boolean isNeedIntercept()
-    {
-        return mIsNeedIntercept;
-    }
-
-    /**
-     * 设置onTouchEvent方法是否需要消费事件
-     *
-     * @param needConsume
-     */
-    public void setNeedConsume(boolean needConsume)
-    {
-        mIsNeedConsume = needConsume;
-    }
-
-    /**
-     * onTouchEvent方法是否需要消费事件
+     * 是否需要拦截事件标识(用于onInterceptTouchEvent方法)
      *
      * @return
      */
-    public boolean isNeedConsume()
+    public boolean isTagIntercept()
     {
-        return mIsNeedConsume;
+        return mTagIntercept;
+    }
+
+    /**
+     * 设置是否需要消费事件标识(用于onTouchEvent方法)
+     *
+     * @param tagConsume
+     */
+    public void setTagConsume(boolean tagConsume)
+    {
+        mTagConsume = tagConsume;
+    }
+
+    /**
+     * 是否需要消费事件标识(用于onTouchEvent方法)
+     *
+     * @return
+     */
+    public boolean isTagConsume()
+    {
+        return mTagConsume;
     }
 
     public float getCurrentX()
