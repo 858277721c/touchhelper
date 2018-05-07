@@ -30,7 +30,7 @@ public abstract class FGestureFrameLayout extends FrameLayout
         init();
     }
 
-    private FTouchHelper mTouchHelper = new FTouchHelper();
+    private final FTouchHelper mTouchHelper = new FTouchHelper();
     private FGestureDetector mGestureDetector;
     private FScroller mScroller;
 
@@ -115,16 +115,29 @@ public abstract class FGestureFrameLayout extends FrameLayout
         }
 
         mTouchHelper.processTouchEvent(event);
+
+        boolean intercept = false;
         switch (event.getAction())
         {
-            case MotionEvent.ACTION_MOVE:
-                if (shouldInterceptTouchEvent(event))
+            case MotionEvent.ACTION_DOWN:
+                if (shouldInterceptTouchEventDown(event))
                 {
-                    mTouchHelper.setNeedIntercept(true);
-                    FTouchHelper.requestDisallowInterceptTouchEvent(this, true);
-                    return true;
+                    intercept = true;
                 }
                 break;
+            case MotionEvent.ACTION_MOVE:
+                if (shouldInterceptTouchEventMove(event))
+                {
+                    intercept = true;
+                }
+                break;
+        }
+
+        if (intercept)
+        {
+            mTouchHelper.setNeedIntercept(true);
+            FTouchHelper.requestDisallowInterceptTouchEvent(this, true);
+            return true;
         }
 
         return super.onInterceptTouchEvent(event);
@@ -138,12 +151,23 @@ public abstract class FGestureFrameLayout extends FrameLayout
     }
 
     /**
-     * 是否要开始手势拦截
+     * 是否要开始手势拦截({@link MotionEvent#ACTION_DOWN}事件)
      *
      * @param event
      * @return
      */
-    protected boolean shouldInterceptTouchEvent(MotionEvent event)
+    protected boolean shouldInterceptTouchEventDown(MotionEvent event)
+    {
+        return false;
+    }
+
+    /**
+     * 是否要开始手势拦截({@link MotionEvent#ACTION_MOVE}事件)
+     *
+     * @param event
+     * @return
+     */
+    protected boolean shouldInterceptTouchEventMove(MotionEvent event)
     {
         return false;
     }
