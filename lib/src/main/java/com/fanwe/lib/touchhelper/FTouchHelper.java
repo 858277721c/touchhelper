@@ -98,9 +98,11 @@ public class FTouchHelper
                 mUpY = mCurrentY;
 
                 onFinishEvent();
+                release();
                 break;
             case MotionEvent.ACTION_CANCEL:
                 onFinishEvent();
+                release();
                 break;
             default:
                 break;
@@ -113,10 +115,14 @@ public class FTouchHelper
         }
     }
 
-    protected void onFinishEvent()
+    private void release()
     {
         setNeedIntercept(false);
         setNeedCosume(false);
+    }
+
+    protected void onFinishEvent()
+    {
     }
 
     /**
