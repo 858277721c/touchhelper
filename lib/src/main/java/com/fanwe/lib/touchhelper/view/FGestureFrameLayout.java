@@ -72,11 +72,6 @@ public abstract class FGestureFrameLayout extends FrameLayout
         return mTouchHelper;
     }
 
-    protected final FGestureDetector getGestureDetector()
-    {
-        return mGestureDetector;
-    }
-
     protected final FScroller getScroller()
     {
         if (mScroller == null)
@@ -147,7 +142,7 @@ public abstract class FGestureFrameLayout extends FrameLayout
     public boolean onTouchEvent(MotionEvent event)
     {
         mTouchHelper.processTouchEvent(event);
-        return getGestureDetector().onTouchEvent(event);
+        return mGestureDetector.onTouchEvent(event);
     }
 
     /**
