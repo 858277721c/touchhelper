@@ -45,7 +45,7 @@ public class FTouchHelper
     /**
      * onTouchEvent方法是否需要消费事件
      */
-    private boolean mIsNeedCosume = false;
+    private boolean mIsNeedConsume = false;
 
     private float mCurrentX;
     private float mCurrentY;
@@ -116,7 +116,7 @@ public class FTouchHelper
     private void release()
     {
         setNeedIntercept(false);
-        setNeedCosume(false);
+        setNeedConsume(false);
     }
 
     /**
@@ -142,11 +142,11 @@ public class FTouchHelper
     /**
      * 设置onTouchEvent方法是否需要消费事件
      *
-     * @param needCosume
+     * @param needConsume
      */
-    public void setNeedCosume(boolean needCosume)
+    public void setNeedConsume(boolean needConsume)
     {
-        mIsNeedCosume = needCosume;
+        mIsNeedConsume = needConsume;
     }
 
     /**
@@ -154,9 +154,9 @@ public class FTouchHelper
      *
      * @return
      */
-    public boolean isNeedCosume()
+    public boolean isNeedConsume()
     {
-        return mIsNeedCosume;
+        return mIsNeedConsume;
     }
 
     public float getCurrentX()

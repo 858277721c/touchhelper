@@ -35,6 +35,13 @@ public class FGestureManager
             super.setNeedIntercept(needIntercept);
             getCallback().onNeedInterceptChanged(needIntercept);
         }
+
+        @Override
+        public void setNeedConsume(boolean needConsume)
+        {
+            super.setNeedConsume(needConsume);
+            getCallback().onNeedConsumeChanged(needConsume);
+        }
     };
 
     private Callback mCallback;
@@ -86,16 +93,6 @@ public class FGestureManager
         return mViewConfiguration;
     }
 
-    /**
-     * 是否拦截事件
-     *
-     * @param intercept
-     */
-    public void interceptTouchEvent(boolean intercept)
-    {
-        mTouchHelper.setNeedIntercept(intercept);
-    }
-
     public VelocityTracker getVelocityTracker()
     {
         if (mVelocityTracker == null)
@@ -139,7 +136,7 @@ public class FGestureManager
             default:
                 if (getCallback().shouldInterceptTouchEvent(event))
                 {
-                    interceptTouchEvent(true);
+                    mTouchHelper.setNeedIntercept(true);
                     return true;
                 }
                 break;
@@ -169,19 +166,19 @@ public class FGestureManager
                 releaseVelocityTracker();
                 break;
             default:
-                if (mTouchHelper.isNeedCosume())
+                if (mTouchHelper.isNeedConsume())
                 {
                     final boolean consume = getCallback().onConsumeEvent(event);
-                    mTouchHelper.setNeedCosume(consume);
+                    mTouchHelper.setNeedConsume(consume);
                 } else
                 {
                     final boolean shouldConsumeTouchEvent = getCallback().shouldConsumeTouchEvent(event);
-                    mTouchHelper.setNeedCosume(shouldConsumeTouchEvent);
+                    mTouchHelper.setNeedConsume(shouldConsumeTouchEvent);
                 }
                 break;
         }
 
-        return mTouchHelper.isNeedCosume();
+        return mTouchHelper.isNeedConsume();
     }
 
     /**
@@ -216,9 +213,9 @@ public class FGestureManager
         /**
          * 是否需要拦截发生变化
          *
-         * @param needIntercept
+         * @param intercept
          */
-        void onNeedInterceptChanged(boolean needIntercept);
+        void onNeedInterceptChanged(boolean intercept);
 
         /**
          * 是否需要消费按下事件，只有此方法返回true，才有后续的移动事件
@@ -235,6 +232,13 @@ public class FGestureManager
          * @return
          */
         boolean shouldConsumeTouchEvent(MotionEvent event);
+
+        /**
+         * 是否需要消费发生变化
+         *
+         * @param consume
+         */
+        void onNeedConsumeChanged(boolean consume);
 
         /**
          * 事件回调
@@ -262,7 +266,7 @@ public class FGestureManager
             }
 
             @Override
-            public void onNeedInterceptChanged(boolean needIntercept)
+            public void onNeedInterceptChanged(boolean intercept)
             {
             }
 
@@ -276,6 +280,11 @@ public class FGestureManager
             public boolean shouldConsumeTouchEvent(MotionEvent event)
             {
                 return false;
+            }
+
+            @Override
+            public void onNeedConsumeChanged(boolean consume)
+            {
             }
 
             @Override
