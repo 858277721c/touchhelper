@@ -49,14 +49,15 @@ public abstract class FGestureFrameLayout extends FrameLayout
             @Override
             public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
             {
+                super.onScroll(e1, e2, distanceX, distanceY);
                 return FGestureFrameLayout.this.onGestureScroll(e2);
             }
 
             @Override
-            public void onActionUp(MotionEvent event, float velocityX, float velocityY)
+            public void onFinishEvent(MotionEvent event, float velocityX, float velocityY)
             {
-                super.onActionUp(event, velocityX, velocityY);
-                FGestureFrameLayout.this.onGestureUp(event, velocityX, velocityY);
+                super.onFinishEvent(event, velocityX, velocityY);
+                FGestureFrameLayout.this.onGestureFinish(event, velocityX, velocityY);
             }
 
             @Override
@@ -100,7 +101,7 @@ public abstract class FGestureFrameLayout extends FrameLayout
             invalidate();
         } else
         {
-
+            onComputeScrollFinish();
         }
     }
 
@@ -190,13 +191,13 @@ public abstract class FGestureFrameLayout extends FrameLayout
     protected abstract boolean onGestureScroll(MotionEvent event);
 
     /**
-     * 手指离开回调
+     * 手势结束回调，收到{@link MotionEvent#ACTION_UP}或者{@link MotionEvent#ACTION_CANCEL}
      *
      * @param event
      * @param velocityX x方向速度
      * @param velocityY y方向速度
      */
-    protected abstract void onGestureUp(MotionEvent event, float velocityX, float velocityY);
+    protected abstract void onGestureFinish(MotionEvent event, float velocityX, float velocityY);
 
     /**
      * 点击事件回调
