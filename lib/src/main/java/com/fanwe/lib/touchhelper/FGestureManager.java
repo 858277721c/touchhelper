@@ -17,23 +17,23 @@ package com.fanwe.lib.touchhelper;
 
 import android.content.Context;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 
 public class FGestureManager
 {
     private final ViewGroup mViewGroup;
-    private final FGestureDetector mGestureDetector;
     private FScroller mScroller;
     private ViewConfiguration mViewConfiguration;
-    private boolean mHasScrolled;
+    private VelocityTracker mVelocityTracker;
     private final FTouchHelper mTouchHelper = new FTouchHelper()
     {
         @Override
         public void setNeedIntercept(boolean needIntercept)
         {
             super.setNeedIntercept(needIntercept);
-            FTouchHelper.requestDisallowInterceptTouchEvent(mViewGroup, needIntercept);
+            getCallback().onNeedInterceptChanged(needIntercept);
         }
     };
 
@@ -42,34 +42,6 @@ public class FGestureManager
     public FGestureManager(ViewGroup viewGroup)
     {
         mViewGroup = viewGroup;
-        mGestureDetector = new FGestureDetector(getContext(), new FGestureDetector.Callback()
-        {
-            @Override
-            public boolean onDown(MotionEvent e)
-            {
-                return getCallback().onGestureDown(e);
-            }
-
-            @Override
-            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY)
-            {
-                mHasScrolled = true;
-                return getCallback().onGestureScroll(e2);
-            }
-
-            @Override
-            public void onFinishEvent(MotionEvent event, float velocityX, float velocityY)
-            {
-                getCallback().onGestureFinish(event, velocityX, velocityY);
-                mHasScrolled = false;
-            }
-
-            @Override
-            public boolean onSingleTapUp(MotionEvent e)
-            {
-                return getCallback().onGestureSingleTapUp(e);
-            }
-        });
     }
 
     public void setCallback(Callback callback)
@@ -115,16 +87,6 @@ public class FGestureManager
     }
 
     /**
-     * 在本次按下到离开的过程中是否触发了滚动
-     *
-     * @return
-     */
-    public boolean hasScrolled()
-    {
-        return mHasScrolled;
-    }
-
-    /**
      * 是否拦截事件
      *
      * @param intercept
@@ -132,6 +94,24 @@ public class FGestureManager
     public void interceptTouchEvent(boolean intercept)
     {
         mTouchHelper.setNeedIntercept(intercept);
+    }
+
+    private VelocityTracker getVelocityTracker()
+    {
+        if (mVelocityTracker == null)
+        {
+            mVelocityTracker = VelocityTracker.obtain();
+        }
+        return mVelocityTracker;
+    }
+
+    private void releaseVelocityTracker()
+    {
+        if (mVelocityTracker != null)
+        {
+            mVelocityTracker.recycle();
+            mVelocityTracker = null;
+        }
     }
 
     /**
@@ -148,18 +128,21 @@ public class FGestureManager
         }
 
         mTouchHelper.processTouchEvent(event);
+        getVelocityTracker().addMovement(event);
 
-        final int action = event.getAction();
-        if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL)
+        switch (event.getAction())
         {
-            // 不处理
-        } else
-        {
-            if (getCallback().shouldInterceptTouchEvent(event))
-            {
-                interceptTouchEvent(true);
-                return true;
-            }
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                releaseVelocityTracker();
+                break;
+            default:
+                if (getCallback().shouldInterceptTouchEvent(event))
+                {
+                    interceptTouchEvent(true);
+                    return true;
+                }
+                break;
         }
 
         return false;
@@ -174,7 +157,33 @@ public class FGestureManager
     public boolean onTouchEvent(MotionEvent event)
     {
         mTouchHelper.processTouchEvent(event);
-        return mGestureDetector.onTouchEvent(event);
+        getVelocityTracker().addMovement(event);
+
+        switch (event.getAction())
+        {
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                releaseVelocityTracker();
+                break;
+            default:
+                if (mTouchHelper.isNeedCosume())
+                {
+                    final boolean consume = getCallback().onConsumeEvent(event);
+                    mTouchHelper.setNeedCosume(consume);
+                } else
+                {
+                    if (getCallback().shouldConsumeTouchEvent(event))
+                    {
+                        mTouchHelper.setNeedCosume(true);
+                    } else
+                    {
+                        mTouchHelper.setNeedCosume(false);
+                    }
+                }
+                break;
+        }
+
+        return mTouchHelper.isNeedCosume();
     }
 
     /**
@@ -199,36 +208,30 @@ public class FGestureManager
     public interface Callback
     {
         /**
-         * 是否要开始拦截({@link MotionEvent#ACTION_DOWN}和{@link MotionEvent#ACTION_MOVE}事件会触发此方法)
+         * 是否开始拦截事件({@link #onInterceptTouchEvent(MotionEvent)}方法触发)
          *
          * @param event
          * @return
          */
         boolean shouldInterceptTouchEvent(MotionEvent event);
 
-        /**
-         * 手势按下回调
-         *
-         * @param event true-消费处理此事件
-         * @return
-         */
-        boolean onGestureDown(MotionEvent event);
+        void onNeedInterceptChanged(boolean needIntercept);
 
         /**
-         * 手势点击回调
+         * 是否开始消费事件
          *
          * @param event
          * @return
          */
-        boolean onGestureSingleTapUp(MotionEvent event);
+        boolean shouldConsumeTouchEvent(MotionEvent event);
 
         /**
-         * 手势滚动回调
+         * 事件回调
          *
          * @param event
          * @return
          */
-        boolean onGestureScroll(MotionEvent event);
+        boolean onConsumeEvent(MotionEvent event);
 
         /**
          * 手势结束回调，收到{@link MotionEvent#ACTION_UP}或者{@link MotionEvent#ACTION_CANCEL}
@@ -250,19 +253,18 @@ public class FGestureManager
             }
 
             @Override
-            public boolean onGestureDown(MotionEvent event)
+            public void onNeedInterceptChanged(boolean needIntercept)
+            {
+            }
+
+            @Override
+            public boolean shouldConsumeTouchEvent(MotionEvent event)
             {
                 return false;
             }
 
             @Override
-            public boolean onGestureSingleTapUp(MotionEvent event)
-            {
-                return false;
-            }
-
-            @Override
-            public boolean onGestureScroll(MotionEvent event)
+            public boolean onConsumeEvent(MotionEvent event)
             {
                 return false;
             }
@@ -270,13 +272,11 @@ public class FGestureManager
             @Override
             public void onGestureFinish(MotionEvent event, float velocityX, float velocityY)
             {
-
             }
 
             @Override
             public void onComputeScroll(int dx, int dy, boolean finish)
             {
-
             }
         };
     }
