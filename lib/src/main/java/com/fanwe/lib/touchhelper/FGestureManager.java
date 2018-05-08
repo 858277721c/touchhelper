@@ -276,6 +276,13 @@ public class FGestureManager
          */
         void onConsumeEventFinish(MotionEvent event);
 
+        /**
+         * 计算滚动回调
+         *
+         * @param dx     x需要滚动的距离
+         * @param dy     y需要滚动的距离
+         * @param finish 滚动是否结束
+         */
         void onComputeScroll(int dx, int dy, boolean finish);
 
         Callback DEFAULT = new Callback()
