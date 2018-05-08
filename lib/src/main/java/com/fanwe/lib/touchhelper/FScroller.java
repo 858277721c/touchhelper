@@ -236,7 +236,7 @@ public class FScroller extends Scroller
 
         final float distance = (float) Math.sqrt(Math.abs(dx * dx) + Math.abs(dy * dy));
         final float disPercent = distance / maxDistance;
-        final int duration = (int) ((disPercent + 1) * minDuration);
+        final int duration = (int) ((disPercent * minDuration) + minDuration);
         return Math.min(duration, maxDuration);
     }
 }
