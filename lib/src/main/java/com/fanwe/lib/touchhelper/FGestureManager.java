@@ -143,6 +143,7 @@ public class FGestureManager
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
                 releaseVelocityTracker();
+                mHasConsumed = false;
                 break;
             default:
                 if (getCallback().shouldInterceptTouchEvent(event))
@@ -200,8 +201,10 @@ public class FGestureManager
 
     /**
      * 外部调用
+     *
+     * @return true-滚动还未结束
      */
-    public void computeScroll()
+    public boolean computeScroll()
     {
         final int dx = getScroller().getDeltaX();
         final int dy = getScroller().getDeltaY();
@@ -215,6 +218,7 @@ public class FGestureManager
         {
             getCallback().onComputeScroll(dx, dy, true);
         }
+        return computeScrollOffset;
     }
 
     public interface Callback
