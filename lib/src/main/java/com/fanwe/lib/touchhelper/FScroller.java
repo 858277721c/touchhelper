@@ -121,8 +121,8 @@ public class FScroller extends Scroller
 
     public boolean startScrollTo(int startX, int startY, int endX, int endY, int duration)
     {
-        int dx = endX - startX;
-        int dy = endY - startY;
+        final int dx = endX - startX;
+        final int dy = endY - startY;
 
         return startScrollExtend(startX, startY, dx, dy, duration);
     }
@@ -170,10 +170,10 @@ public class FScroller extends Scroller
     @Override
     public boolean computeScrollOffset()
     {
-        boolean result = super.computeScrollOffset();
+        final boolean result = super.computeScrollOffset();
 
-        int currX = getCurrX();
-        int currY = getCurrY();
+        final int currX = getCurrX();
+        final int currY = getCurrY();
 
         mDeltaX = currX - mLastX;
         mDeltaY = currY - mLastY;
@@ -212,7 +212,7 @@ public class FScroller extends Scroller
      */
     public int getDuration(int dx, int dy)
     {
-        int duration = computeDuration(dx, dy, mMaxScrollDistance, mMaxScrollDuration, mMinScrollDuration);
+        final int duration = computeDuration(dx, dy, mMaxScrollDistance, mMaxScrollDuration, mMinScrollDuration);
         return duration;
     }
 
@@ -234,9 +234,9 @@ public class FScroller extends Scroller
             return minDuration;
         }
 
-        float distance = (float) Math.sqrt(Math.abs(dx * dx) + Math.abs(dy * dy));
-        float disPercent = distance / maxDistance;
-        int duration = (int) ((disPercent + 1) * minDuration);
+        final float distance = (float) Math.sqrt(Math.abs(dx * dx) + Math.abs(dy * dy));
+        final float disPercent = distance / maxDistance;
+        final int duration = (int) ((disPercent + 1) * minDuration);
         return Math.min(duration, maxDuration);
     }
 }
