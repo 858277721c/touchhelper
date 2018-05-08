@@ -19,11 +19,10 @@ import android.content.Context;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.ViewConfiguration;
-import android.view.ViewGroup;
 
 public class FGestureManager
 {
-    private final ViewGroup mViewGroup;
+    private final Context mContext;
     private FScroller mScroller;
     private ViewConfiguration mViewConfiguration;
     private VelocityTracker mVelocityTracker;
@@ -47,9 +46,9 @@ public class FGestureManager
 
     private Callback mCallback;
 
-    public FGestureManager(ViewGroup viewGroup)
+    public FGestureManager(Context context)
     {
-        mViewGroup = viewGroup;
+        mContext = context.getApplicationContext();
     }
 
     public void setCallback(Callback callback)
@@ -68,7 +67,7 @@ public class FGestureManager
 
     public Context getContext()
     {
-        return mViewGroup.getContext();
+        return mContext;
     }
 
     public FTouchHelper getTouchHelper()
@@ -209,15 +208,7 @@ public class FGestureManager
         final int dx = getScroller().getDeltaX();
         final int dy = getScroller().getDeltaY();
         final boolean computeScrollOffset = getScroller().computeScrollOffset();
-
-        if (computeScrollOffset)
-        {
-            getCallback().onComputeScroll(dx, dy, false);
-            mViewGroup.invalidate();
-        } else
-        {
-            getCallback().onComputeScroll(dx, dy, true);
-        }
+        getCallback().onComputeScroll(dx, dy, !computeScrollOffset);
         return computeScrollOffset;
     }
 
