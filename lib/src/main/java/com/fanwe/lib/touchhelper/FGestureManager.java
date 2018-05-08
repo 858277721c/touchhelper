@@ -190,6 +190,7 @@ public class FGestureManager
     public boolean computeScroll()
     {
         final boolean computeScrollOffset = getScroller().computeScrollOffset();
+
         final int dx = getScroller().getDeltaX();
         final int dy = getScroller().getDeltaY();
         getCallback().onComputeScroll(dx, dy, !computeScrollOffset);
