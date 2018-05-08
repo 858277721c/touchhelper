@@ -210,56 +210,21 @@ public class FTouchHelper
     }
 
     /**
-     * 保存当前移动方向
-     */
-    public void saveDirection()
-    {
-        if (mDirection != Direction.None)
-        {
-            return;
-        }
-
-        final float dx = getDeltaXFrom(EVENT_DOWN);
-        final float dy = getDeltaYFrom(EVENT_DOWN);
-        if (dx == 0 && dy == 0)
-        {
-            return;
-        }
-
-        if (Math.abs(dx) > Math.abs(dy))
-        {
-            if (dx < 0)
-            {
-                setDirection(Direction.MoveLeft);
-            } else if (dx > 0)
-            {
-                setDirection(Direction.MoveRight);
-            }
-        } else
-        {
-            if (dy < 0)
-            {
-                setDirection(Direction.MoveTop);
-            } else if (dy > 0)
-            {
-                setDirection(Direction.MoveBottom);
-            }
-        }
-    }
-
-    /**
      * 保存水平方向
+     *
+     * @param event {@link #EVENT_DOWN} {@link #EVENT_LAST}
+     * @return
      */
-    public void saveDirectionHorizontal()
+    public boolean saveDirectionHorizontalFrom(int event)
     {
         if (mDirection == Direction.MoveLeft || mDirection == Direction.MoveRight)
         {
-            return;
+            return true;
         }
-        final int dx = (int) getDeltaXFrom(EVENT_DOWN);
+        final int dx = (int) getDeltaXFrom(event);
         if (dx == 0)
         {
-            return;
+            return false;
         }
 
         if (dx < 0)
@@ -269,21 +234,25 @@ public class FTouchHelper
         {
             setDirection(Direction.MoveRight);
         }
+        return true;
     }
 
     /**
      * 保存竖直方向
+     *
+     * @param event {@link #EVENT_DOWN} {@link #EVENT_LAST}
+     * @return
      */
-    public void saveDirectionVertical()
+    public boolean saveDirectionVerticalFrom(int event)
     {
         if (mDirection == Direction.MoveTop || mDirection == Direction.MoveBottom)
         {
-            return;
+            return true;
         }
-        final int dy = (int) getDeltaYFrom(EVENT_DOWN);
+        final int dy = (int) getDeltaYFrom(event);
         if (dy == 0)
         {
-            return;
+            return false;
         }
 
         if (dy < 0)
@@ -293,6 +262,7 @@ public class FTouchHelper
         {
             setDirection(Direction.MoveBottom);
         }
+        return true;
     }
 
     private void setDirection(Direction direction)
@@ -360,14 +330,13 @@ public class FTouchHelper
      */
     public double getDegreeXFrom(int event)
     {
-        float dx = getDeltaXFrom(event);
+        final float dx = getDeltaXFrom(event);
         if (dx == 0)
         {
             return 0;
         }
-        float dy = getDeltaYFrom(event);
-
-        float angle = Math.abs(dy) / Math.abs(dx);
+        final float dy = getDeltaYFrom(event);
+        final float angle = Math.abs(dy) / Math.abs(dx);
         return Math.toDegrees(Math.atan(angle));
     }
 
@@ -379,14 +348,13 @@ public class FTouchHelper
      */
     public double getDegreeYFrom(int event)
     {
-        float dy = getDeltaYFrom(event);
+        final float dy = getDeltaYFrom(event);
         if (dy == 0)
         {
             return 0;
         }
-        float dx = getDeltaXFrom(event);
-
-        float angle = Math.abs(dx) / Math.abs(dy);
+        final float dx = getDeltaXFrom(event);
+        final float angle = Math.abs(dx) / Math.abs(dy);
         return Math.toDegrees(Math.atan(angle));
     }
 
@@ -445,22 +413,20 @@ public class FTouchHelper
      */
     public int getLegalDeltaX(int x, int minX, int maxX, int dx)
     {
-        int future = x + dx;
+        final int future = x + dx;
         if (isMoveLeftFrom(EVENT_LAST))
         {
             //如果向左拖动
             if (future < minX)
             {
-                int comsume = minX - future;
-                dx += comsume;
+                dx += (minX - future);
             }
         } else if (isMoveRightFrom(EVENT_LAST))
         {
             //如果向右拖动
             if (future > maxX)
             {
-                int comsume = future - maxX;
-                dx -= comsume;
+                dx -= (future - maxX);
             }
         }
         return dx;
@@ -477,22 +443,20 @@ public class FTouchHelper
      */
     public int getLegalDeltaY(int y, int minY, int maxY, int dy)
     {
-        int future = y + dy;
+        final int future = y + dy;
         if (isMoveTopFrom(EVENT_LAST))
         {
             //如果向上拖动
             if (future < minY)
             {
-                int comsume = minY - future;
-                dy += comsume;
+                dy += (minY - future);
             }
         } else if (isMoveBottomFrom(EVENT_LAST))
         {
             //如果向下拖动
             if (future > maxY)
             {
-                int comsume = future - maxY;
-                dy -= comsume;
+                dy -= (future - maxY);
             }
         }
         return dy;
