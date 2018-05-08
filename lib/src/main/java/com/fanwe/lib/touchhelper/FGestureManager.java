@@ -18,13 +18,11 @@ package com.fanwe.lib.touchhelper;
 import android.content.Context;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
-import android.view.ViewConfiguration;
 
 public class FGestureManager
 {
     private final Context mContext;
     private FScroller mScroller;
-    private ViewConfiguration mViewConfiguration;
     private VelocityTracker mVelocityTracker;
     private boolean mHasConsumed;
     private final FTouchHelper mTouchHelper = new FTouchHelper()
@@ -56,20 +54,6 @@ public class FGestureManager
         mCallback = callback;
     }
 
-    public Callback getCallback()
-    {
-        if (mCallback == null)
-        {
-            mCallback = Callback.DEFAULT;
-        }
-        return mCallback;
-    }
-
-    public Context getContext()
-    {
-        return mContext;
-    }
-
     public FTouchHelper getTouchHelper()
     {
         return mTouchHelper;
@@ -79,18 +63,9 @@ public class FGestureManager
     {
         if (mScroller == null)
         {
-            mScroller = new FScroller(getContext());
+            mScroller = new FScroller(mContext);
         }
         return mScroller;
-    }
-
-    public ViewConfiguration getViewConfiguration()
-    {
-        if (mViewConfiguration == null)
-        {
-            mViewConfiguration = ViewConfiguration.get(getContext());
-        }
-        return mViewConfiguration;
     }
 
     public VelocityTracker getVelocityTracker()
@@ -119,6 +94,15 @@ public class FGestureManager
     public boolean hasConsumed()
     {
         return mHasConsumed;
+    }
+
+    private Callback getCallback()
+    {
+        if (mCallback == null)
+        {
+            mCallback = Callback.DEFAULT;
+        }
+        return mCallback;
     }
 
     /**
