@@ -191,25 +191,22 @@ public class FGestureManager
      */
     public boolean isClick(MotionEvent event)
     {
-        if (event.getAction() != MotionEvent.ACTION_UP)
+        if (event.getAction() == MotionEvent.ACTION_UP)
         {
-            throw new IllegalArgumentException("Illegal event:" + event);
+            final long clickTimeout = ViewConfiguration.getPressedStateDuration() + ViewConfiguration.getTapTimeout();
+            final int touchSlop = ViewConfiguration.get(mContext).getScaledTouchSlop();
+
+            final long duration = event.getEventTime() - event.getDownTime();
+            final int dx = (int) getTouchHelper().getDeltaXFrom(FTouchHelper.EVENT_DOWN);
+            final int dy = (int) getTouchHelper().getDeltaYFrom(FTouchHelper.EVENT_DOWN);
+
+            if (duration < clickTimeout && dx < touchSlop && dy < touchSlop)
+            {
+                return true;
+            }
         }
 
-        final long clickTimeout = ViewConfiguration.getPressedStateDuration() + ViewConfiguration.getTapTimeout();
-        final int touchSlop = ViewConfiguration.get(mContext).getScaledTouchSlop();
-
-        final long duration = event.getEventTime() - event.getDownTime();
-        final int dx = (int) getTouchHelper().getDeltaXFrom(FTouchHelper.EVENT_DOWN);
-        final int dy = (int) getTouchHelper().getDeltaYFrom(FTouchHelper.EVENT_DOWN);
-
-        if (duration < clickTimeout && dx < touchSlop && dy < touchSlop)
-        {
-            return true;
-        } else
-        {
-            return false;
-        }
+        return false;
     }
 
     /**
