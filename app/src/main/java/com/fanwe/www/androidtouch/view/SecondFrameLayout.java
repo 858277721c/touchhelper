@@ -1,4 +1,4 @@
-package com.fanwe.www.androidtouch;
+package com.fanwe.www.androidtouch.view;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -7,14 +7,16 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
-public class TestFrameLayout extends FrameLayout
+import com.fanwe.www.androidtouch.MotionEventLogger;
+
+public class SecondFrameLayout extends FrameLayout
 {
-    public TestFrameLayout(@NonNull Context context)
+    public SecondFrameLayout(@NonNull Context context)
     {
         super(context);
     }
 
-    public TestFrameLayout(@NonNull Context context, @Nullable AttributeSet attrs)
+    public SecondFrameLayout(@NonNull Context context, @Nullable AttributeSet attrs)
     {
         super(context, attrs);
     }
@@ -23,7 +25,7 @@ public class TestFrameLayout extends FrameLayout
     public boolean onInterceptTouchEvent(MotionEvent ev)
     {
         final boolean result = super.onInterceptTouchEvent(ev);
-        MotionEventLogger.i("onInterceptTouchEvent:" + result, ev);
+        MotionEventLogger.i( "Second onInterceptTouchEvent:" + result, ev);
         return result;
     }
 
@@ -31,7 +33,7 @@ public class TestFrameLayout extends FrameLayout
     public boolean onTouchEvent(MotionEvent event)
     {
         final boolean result = super.onTouchEvent(event);
-        MotionEventLogger.i("onTouchEvent:" + result, event);
+        MotionEventLogger.i("Second onTouchEvent:" + result, event);
         return result;
     }
 }
