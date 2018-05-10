@@ -261,19 +261,8 @@ public class FGestureManager
          */
         void onComputeScroll(int dx, int dy, boolean finish);
 
-        Callback DEFAULT = new Callback()
+        Callback DEFAULT = new SimpleCallback()
         {
-            @Override
-            public boolean shouldInterceptTouchEvent(MotionEvent event)
-            {
-                return false;
-            }
-
-            @Override
-            public void onTagInterceptChanged(boolean intercept)
-            {
-            }
-
             @Override
             public boolean consumeDownEvent(MotionEvent event)
             {
@@ -284,11 +273,6 @@ public class FGestureManager
             public boolean shouldConsumeTouchEvent(MotionEvent event)
             {
                 return false;
-            }
-
-            @Override
-            public void onTagConsumeChanged(boolean consume)
-            {
             }
 
             @Override
@@ -307,5 +291,24 @@ public class FGestureManager
             {
             }
         };
+    }
+
+    public abstract static class SimpleCallback implements Callback
+    {
+        @Override
+        public boolean shouldInterceptTouchEvent(MotionEvent event)
+        {
+            return false;
+        }
+
+        @Override
+        public void onTagInterceptChanged(boolean intercept)
+        {
+        }
+
+        @Override
+        public void onTagConsumeChanged(boolean consume)
+        {
+        }
     }
 }
