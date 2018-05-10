@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+import com.fanwe.www.androidtouch.MotionEventLogger;
+
 public class TestTextView extends android.support.v7.widget.AppCompatTextView
 {
     public TestTextView(Context context)
@@ -27,9 +29,10 @@ public class TestTextView extends android.support.v7.widget.AppCompatTextView
             result = true;
         } else if (action == MotionEvent.ACTION_MOVE)
         {
-            result = true;
+            result = false;
         }
 
-        return super.onTouchEvent(event) || result;
+        MotionEventLogger.i("TextView onTouchEvent:" + result, event);
+        return result;
     }
 }

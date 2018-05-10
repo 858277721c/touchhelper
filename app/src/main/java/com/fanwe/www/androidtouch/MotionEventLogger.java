@@ -14,6 +14,21 @@ public class MotionEventLogger
             return;
         }
 
+        Log.i(TAG, getLogString(msg, event));
+    }
+
+    public static void e(String msg, MotionEvent event)
+    {
+        if (msg == null)
+        {
+            return;
+        }
+
+        Log.e(TAG, getLogString(msg, event));
+    }
+
+    public static String getLogString(String msg, MotionEvent event)
+    {
         String eventName = "";
         if (event != null)
         {
@@ -37,7 +52,6 @@ public class MotionEventLogger
                     break;
             }
         }
-
-        Log.i(TAG, eventName + " " + msg);
+        return eventName + " " + msg;
     }
 }

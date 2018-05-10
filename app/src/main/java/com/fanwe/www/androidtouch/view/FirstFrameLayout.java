@@ -25,7 +25,7 @@ public class FirstFrameLayout extends FrameLayout
     public boolean onInterceptTouchEvent(MotionEvent ev)
     {
         final boolean result = super.onInterceptTouchEvent(ev);
-        MotionEventLogger.i("onInterceptTouchEvent:" + result, ev);
+        MotionEventLogger.e("onInterceptTouchEvent:" + result, ev);
         return result;
     }
 
@@ -33,7 +33,7 @@ public class FirstFrameLayout extends FrameLayout
     public boolean onTouchEvent(MotionEvent event)
     {
         final boolean result = super.onTouchEvent(event);
-        MotionEventLogger.i("onTouchEvent:" + result, event);
+        MotionEventLogger.e("onTouchEvent:" + result, event);
         return result;
     }
 }
