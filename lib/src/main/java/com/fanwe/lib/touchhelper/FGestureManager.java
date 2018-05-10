@@ -18,6 +18,7 @@ package com.fanwe.lib.touchhelper;
 import android.content.Context;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
+import android.view.ViewConfiguration;
 
 public class FGestureManager
 {
@@ -180,6 +181,35 @@ public class FGestureManager
         }
 
         return mTouchHelper.isTagConsume();
+    }
+
+    /**
+     * 是否是点击事件
+     *
+     * @param event
+     * @return
+     */
+    public boolean isClick(MotionEvent event)
+    {
+        if (event.getAction() != MotionEvent.ACTION_UP)
+        {
+            throw new IllegalArgumentException("Illegal event:" + event);
+        }
+
+        final long clickTimeout = ViewConfiguration.getPressedStateDuration() + ViewConfiguration.getTapTimeout();
+        final int touchSlop = ViewConfiguration.get(mContext).getScaledTouchSlop();
+
+        final long duration = event.getEventTime() - event.getDownTime();
+        final int dx = (int) getTouchHelper().getDeltaXFrom(FTouchHelper.EVENT_DOWN);
+        final int dy = (int) getTouchHelper().getDeltaYFrom(FTouchHelper.EVENT_DOWN);
+
+        if (duration < clickTimeout && dx < touchSlop && dy < touchSlop)
+        {
+            return true;
+        } else
+        {
+            return false;
+        }
     }
 
     /**
