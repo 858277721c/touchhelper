@@ -18,6 +18,7 @@ package com.fanwe.lib.touchhelper;
 import android.content.Context;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
+import android.view.ViewConfiguration;
 
 public class FGestureManager
 {
@@ -183,6 +184,32 @@ public class FGestureManager
     }
 
     /**
+     * 是否是点击事件
+     *
+     * @param event
+     * @return
+     */
+    public boolean isClick(MotionEvent event)
+    {
+        if (event.getAction() == MotionEvent.ACTION_UP)
+        {
+            final long clickTimeout = ViewConfiguration.getPressedStateDuration() + ViewConfiguration.getTapTimeout();
+            final int touchSlop = ViewConfiguration.get(mContext).getScaledTouchSlop();
+
+            final long duration = event.getEventTime() - event.getDownTime();
+            final int dx = (int) getTouchHelper().getDeltaXFrom(FTouchHelper.EVENT_DOWN);
+            final int dy = (int) getTouchHelper().getDeltaYFrom(FTouchHelper.EVENT_DOWN);
+
+            if (duration < clickTimeout && dx < touchSlop && dy < touchSlop)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * 外部调用
      *
      * @return true-滚动还未结束
@@ -261,19 +288,8 @@ public class FGestureManager
          */
         void onComputeScroll(int dx, int dy, boolean finish);
 
-        Callback DEFAULT = new Callback()
+        Callback DEFAULT = new SimpleCallback()
         {
-            @Override
-            public boolean shouldInterceptTouchEvent(MotionEvent event)
-            {
-                return false;
-            }
-
-            @Override
-            public void onTagInterceptChanged(boolean intercept)
-            {
-            }
-
             @Override
             public boolean consumeDownEvent(MotionEvent event)
             {
@@ -284,11 +300,6 @@ public class FGestureManager
             public boolean shouldConsumeTouchEvent(MotionEvent event)
             {
                 return false;
-            }
-
-            @Override
-            public void onTagConsumeChanged(boolean consume)
-            {
             }
 
             @Override
@@ -307,5 +318,24 @@ public class FGestureManager
             {
             }
         };
+    }
+
+    public abstract static class SimpleCallback implements Callback
+    {
+        @Override
+        public boolean shouldInterceptTouchEvent(MotionEvent event)
+        {
+            return false;
+        }
+
+        @Override
+        public void onTagInterceptChanged(boolean intercept)
+        {
+        }
+
+        @Override
+        public void onTagConsumeChanged(boolean consume)
+        {
+        }
     }
 }
